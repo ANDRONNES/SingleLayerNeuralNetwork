@@ -1,6 +1,6 @@
 public class Perceptron {
     private float[] weights;
-    private float threshould;
+    private float threshould = 0.01f;
     private float alpha = 0.01f;
     private float[] inputs;
     private float error;
@@ -31,7 +31,7 @@ public class Perceptron {
         for (int i = 0; i < weights.length; i++) {
             weights[i] += (rightDecision - decision) * inputs[i] /* * alpha*/;
         }
-        threshould += (rightDecision - decision) * alpha;
+//        threshould += (rightDecision - decision) * alpha;
         if(Math.abs(rightDecision-decision)<threshould){  //In learnPerceptron method
             return;
         }

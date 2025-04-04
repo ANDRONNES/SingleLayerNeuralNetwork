@@ -1,4 +1,4 @@
-package TestingData;
+package Data.TrainingData;
 
 public class Perceptron {
     private float[] weights;
@@ -7,7 +7,7 @@ public class Perceptron {
     private float bias;
 
     public Perceptron() {
-        
+
     }
 
     public int compute(int[] inputs) {
