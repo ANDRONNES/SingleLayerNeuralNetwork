@@ -4,6 +4,15 @@ public class Perceptron {
     private float alpha = 0.01f;
     private float[] inputs;
     private float decision;
+    private String laguageName;
+
+    public String getLaguageName() {
+        return laguageName;
+    }
+
+    public void setLaguageName(String laguageName) {
+        this.laguageName = laguageName;
+    }
 
     public float[] getWeights() {
         return weights;
@@ -38,9 +47,9 @@ public class Perceptron {
 
 
     //wins perceptron with the biggest y(decision)
-    public void learn(int rightDecision){
+    public void learn(int rightDecision,float[] inputVec){
         for (int i = 0; i < weights.length; i++) {
-            weights[i] += (rightDecision - decision) * inputs[i]  * alpha;
+            weights[i] += (rightDecision - decision) * inputVec[i]  * alpha;
         }
     }
 

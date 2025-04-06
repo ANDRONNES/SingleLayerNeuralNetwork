@@ -18,14 +18,16 @@ public class Main {
 //
 //            }
 //        }
+        Layer perceptronLayer = new Layer();
+        perceptronLayer.train();
 
     }
 
-    public static void learn(int rightDecision,Perceptron p){
+    /*public static void learn(int rightDecision,Perceptron p){
         while(Math.abs(rightDecision - p.getDecision())> p.getThreshould()){
             p.learn(rightDecision);
         }
-    }
+    }*/
 
 
 }
