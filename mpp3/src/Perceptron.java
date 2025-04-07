@@ -1,42 +1,48 @@
 public class Perceptron {
     private float[] weights;
     private float threshould = 0.01f;
-    private float alpha = 0.01f;
+    private float alpha = 0.1f;
     private float[] inputs;
-    private float error;
-
-    public float[] getWeights() {
-        return weights;
-    }
+    private float decision;
+    private String laguageName;
 
     public Perceptron() {
         this.weights = randomArray();
-        this.threshould = (float) (-1 + (Math.random() * 2));
     }
 
-    public int compute(float[] inputs) {
+    public String getLaguageName() {
+        return laguageName;
+    }
+
+    public void setLaguageName(String laguageName) {
+        this.laguageName = laguageName;
+    }
+
+
+    public float getDecision() {
+        return decision;
+    }
+
+    public float getThreshould() {
+        return threshould;
+    }
+
+    public float compute(float[] inputs) {
         float result = 0;
         this.inputs = inputs;
         for (int i = 0; i < weights.length; i++) {
             result += inputs[i] * weights[i];
         }
-        result += threshould;
-        if (result >= 0) {
-            return 1;
-        } else
-            return 0;
+        this.decision = result;
+        return result;
     }
 
-    public void learn(int decision,int rightDecision) {
+    public void learn(int rightDecision){
         for (int i = 0; i < weights.length; i++) {
-            weights[i] += (rightDecision - decision) * inputs[i] /* * alpha*/;
+            weights[i] += alpha * (rightDecision - decision) * inputs[i];
         }
-//        threshould += (rightDecision - decision) * alpha;
-        if(Math.abs(rightDecision-decision)<threshould){  //In learnPerceptron method
-            return;
-        }
-
     }
+
 
     public float[] randomArray() {
         float[] randomValuesArray = new float[26];
