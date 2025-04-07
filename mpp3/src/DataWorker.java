@@ -7,48 +7,19 @@ import java.util.List;
 import java.util.Map;
 
 public class DataWorker {
-    float[] inputs = new float[26];
-    List<Path> languageFolders;
-    private String currentDirName;
-
-    public String getCurrentDirName() {
-        return currentDirName;
-    }
+    private List<Path> PathesTolanguageFolders;
 
     public DataWorker(String path) {
         try {
-            languageFolders = Files.list(Path.of(path))
+            PathesTolanguageFolders = Files.list(Path.of(path))
                     .filter(Files::isDirectory)
                     .toList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
     public DataWorker(){}
-
-    public float[] walkFilesInDirectories(String p) {
-        for (int i = 0; i < languageFolders.size(); i++) {
-            currentDirName = languageFolders.get(i).getFileName().toString();
-            Path languageFolder = languageFolders.get(i);
-            Path path = Path.of(p);
-
-            try {
-                Files.walkFileTree(languageFolder, new SimpleFileVisitor<Path>() {
-                    @Override
-                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                        if (file.toString().endsWith(".txt")) {
-                            inputs = readAndModifyFileText(file);
-                        }
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return inputs;
-        }
-        return inputs;
-    }
 
     public float[] readAndModifyFileText(Path fileName) {
         Map<Character, Integer> map = new HashMap<>();
@@ -71,13 +42,27 @@ public class DataWorker {
             for (char c = 'a'; c <= 'z'; c++) {
                 inputs[c - 'a'] = (float) map.getOrDefault(c, 0) / letterCount;
             }
-            System.out.println(map);
             return inputs;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public float[] getInputsFromConsoleText(String s){
+        float [] result = new float[26];
+        Map<Character, Integer> map = new HashMap<>();
+        s = s.toLowerCase().replaceAll("[^a-z]", "");
+        char[] chars = s.toCharArray();
+        int letterCount = chars.length;
+        for (Character c : chars) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        for(char c = 'a'; c <= 'z';c++){
+            result[c-'a'] = (float) map.getOrDefault(c,0) / letterCount;
+        }
+        return result;
     }
 
     public List<String> getDirNames(String path){
@@ -94,5 +79,9 @@ public class DataWorker {
             System.out.println("Directories not found");
         }
         return dirNames;
+    }
+
+    public List<Path> getPathesToLanguageFolders() {
+        return PathesTolanguageFolders;
     }
 }

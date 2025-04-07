@@ -1,28 +1,44 @@
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 public class Teacher {
-    private Perceptron perceptron;
-    private int rightDecision = 1;
-    private int rightDecisionForAnotherLang = -1;
-    private float[] inputs;
+    private final Perceptron perceptron;
     DataWorker dataWorker = new DataWorker("..\\mpp3/src/Data/TrainingData");
+
     public Teacher(Perceptron perceptron) {
         this.perceptron = perceptron;
     }
-    public void teach(){
-        inputs = getInputs();
-        if(dataWorker.getCurrentDirName().equals(perceptron.getLaguageName())) {
-            while (Math.abs(rightDecision - perceptron.compute(getInputs())) > perceptron.getThreshould()) {
-                perceptron.learn(rightDecision,inputs);
-            }
-        } else {
-            while (Math.abs(rightDecisionForAnotherLang - perceptron.compute(getInputs())) > perceptron.getThreshould()) {
-                perceptron.learn(rightDecisionForAnotherLang,inputs);
+
+    public void teach(int epoch) {
+        for (int i = 0; i < epoch; i++) {
+            for (Path folder : dataWorker.getPathesToLanguageFolders()) {
+
+                String currentLang = folder.getFileName().toString();
+                int expectedDecision = currentLang.equals(perceptron.getLaguageName()) ? 1 : -1;
+
+                try {
+                    Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                            if (file.toString().endsWith(".txt")) {
+
+                                float[] inputs = dataWorker.readAndModifyFileText(file);
+
+                                while (Math.abs(expectedDecision - perceptron.compute(inputs)) > perceptron.getThreshould()) {
+                                    perceptron.learn(expectedDecision);
+                                }
+                            }
+                            return FileVisitResult.CONTINUE;
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
-    }
-    public float[] getInputs(){
-        inputs = dataWorker.walkFilesInDirectories("..\\mpp3/src/Data/TrainingData");
-        return inputs;
     }
 }
