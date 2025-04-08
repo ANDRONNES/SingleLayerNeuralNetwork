@@ -14,17 +14,18 @@ public class Layer {
     Perceptron[] layer;
     List<String> dirNames = new ArrayList<>();
     DataWorker dw = new DataWorker();
+    String pathToTrainingData;
 
     public Layer() {
         this.numberOfPerceptrons = dirCount();
-        dirNames = dw.getDirNames("..\\mpp3/src/Data/TrainingData");
+        dirNames = dw.getDirNames("..\\mpp3\\src\\Data\\TrainingData");
         createPerceptronLayer();
     }
 
     private int dirCount() {
         int dirCount = 0;
         try {
-            dirCount = (int) Files.list(Path.of("..\\mpp3/src/Data/TestingData")).filter(Files::isDirectory).count();
+            dirCount = (int) Files.list(Path.of("..\\mpp3\\src\\Data\\TrainingData")).filter(Files::isDirectory).count();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,13 +60,14 @@ public class Layer {
         return wonPerceptron;
     }
 
-    public void testTextFromConsole(String text) {
+    public String testTextFromConsole(String text) {
         float[] inputs = dw.getInputsFromConsoleText(text);
         for (int i = 0; i < layer.length; i++) {
             layer[i].compute(inputs);
         }
         Perceptron wonPerceptron = trainigOrTestingResult();
-        System.out.println("Your language is " + wonPerceptron.getLaguageName());
+//        System.out.println();
+        return "Your language is " + wonPerceptron.getLaguageName();
     }
 
 

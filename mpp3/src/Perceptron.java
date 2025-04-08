@@ -1,7 +1,7 @@
 public class Perceptron {
     private float[] weights;
     private float threshould = 0.01f;
-    private float alpha = 0.1f;
+    private float alpha = 0.01f;
     private float[] inputs;
     private float decision;
     private String laguageName;

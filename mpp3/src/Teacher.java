@@ -7,7 +7,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public class Teacher {
     private final Perceptron perceptron;
-    DataWorker dataWorker = new DataWorker("..\\mpp3/src/Data/TrainingData");
+    DataWorker dataWorker = new DataWorker("..\\mpp3\\src\\Data\\TrainingData");
 
     public Teacher(Perceptron perceptron) {
         this.perceptron = perceptron;
