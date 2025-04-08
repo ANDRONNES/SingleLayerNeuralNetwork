@@ -14,7 +14,6 @@ public class Layer {
     Perceptron[] layer;
     List<String> dirNames = new ArrayList<>();
     DataWorker dw = new DataWorker();
-    String pathToTrainingData;
 
     public Layer() {
         this.numberOfPerceptrons = dirCount();
